@@ -102,8 +102,7 @@
                             <property name="can_focus">False</property>
                             <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkListBox">
-                                <property name="name">thumbdrive_list</property>
+                              <object class="GtkListBox" id="thumbdrive_list">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                               </object>
@@ -182,8 +181,7 @@
                             <property name="can_focus">False</property>
                             <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkListBox">
-                                <property name="name">iso_list</property>
+                              <object class="GtkListBox" id="iso_list">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                               </object>

@@ -28,9 +28,10 @@
 
 import subprocess
 import os
+from pathlib import Path
 
 from gi.repository import Gtk
-from xdg import XDG_DATA_HOME
+import xdg.BaseDirectory
 
 import thumbdrives.vdisk as vdisk
 
@@ -39,16 +40,13 @@ import thumbdrives.vdisk as vdisk
 class ThumbdrivesWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'ThumbdrivesWindow'
 
-    mount = Gtk.Template.Child()
-    unmount = Gtk.Template.Child()
-
     thumbdrive_list = Gtk.Template.Child()
     iso_list = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        datadir = XDG_DATA_HOME / "thumbdrives"
+        datadir = Path(xdg.BaseDirectory.xdg_data_home) / "thumbdrives"
         if not datadir.is_dir():
             datadir.mkdir()
 
@@ -65,13 +63,13 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     def on_unmount_clicked(self, widget, args):
         vdisk.unmount()
 
-    def add_img(path):
+    def add_img(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         label = Gtk.Label(path.name.replace(".img", ""))
         box.pack_start(label, True, True, False)
         self.thumbdrive_list.insert(box)
 
-    def add_iso(path):
+    def add_iso(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         label = Gtk.Label(path.name.replace(".iso", ""))
         box.pack_start(label, True, True, False)
