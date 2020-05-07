@@ -30,16 +30,21 @@ import subprocess
 import os
 from pathlib import Path
 
-from gi.repository import Gtk
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Handy', '0.0')
+from gi.repository import Gtk, Handy
 import xdg.BaseDirectory
 
 import thumbdrives.vdisk as vdisk
 
+Handy.Column()
 
 @Gtk.Template(resource_path='/nl/brixit/Thumbdrives/window.ui')
 class ThumbdrivesWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'ThumbdrivesWindow'
 
+    headerbar = Gtk.Template.Child()
     thumbdrive_list = Gtk.Template.Child()
     iso_list = Gtk.Template.Child()
 
@@ -55,22 +60,44 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         for iso in datadir.glob('*.iso'):
             self.add_iso(iso)
 
-    def on_mount_clicked(self, widget, args):
-        print("MOUNTING")
-        subprocess.run(['truncate', '-s', '16G', '/tmp/test.img'])
-        vdisk.mount("/tmp/test.img")
-
-    def on_unmount_clicked(self, widget, args):
-        vdisk.unmount()
+        self.thumbdrive_list.show_all()
+        self.iso_list.show_all()
 
     def add_img(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        label = Gtk.Label(path.name.replace(".img", ""))
+        icon = Gtk.Image()
+        label = Gtk.Label(path.name.replace(".img", ""), xalign=0)
+        box.pack_start(icon, False, False, False)
         box.pack_start(label, True, True, False)
-        self.thumbdrive_list.insert(box)
+        box.filename = str(path)
+        self.thumbdrive_list.insert(box, -1)
 
     def add_iso(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        label = Gtk.Label(path.name.replace(".iso", ""))
+        icon = Gtk.Image()
+        label = Gtk.Label(path.name.replace(".iso", ""), xalign=0)
+        label.set_margin_top(8)
+        label.set_margin_bottom(8)
+        box.pack_start(icon, False, False, False)
         box.pack_start(label, True, True, False)
-        self.iso_list.insert(box)
+        box.filename = str(path)
+        self.iso_list.insert(box, -1)
+
+    def update_mounted():
+        filename = vdisk.get_mounted()
+        if filename is None:
+            self.headerbar.set_subtitle("No drive mounted")
+        else:
+            self.headerbar.set_subtitle(filename)
+
+    @Gtk.Template.Callback
+    def on_image_row_activated(self, listbox, row):
+        box = row.get_child()
+        filename = box.filename
+
+        if ".iso" in filename:
+            vdisk.mount(filename, cdimage=True)
+        else:
+            vdisk.mount(filename)
+
+        self.update_mounted()
