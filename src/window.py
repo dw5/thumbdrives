@@ -69,6 +69,8 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         icon = Gtk.Image()
         label = Gtk.Label(path.name.replace(".img", ""), xalign=0)
+        label.set_margin_top(8)
+        label.set_margin_bottom(8)
         box.pack_start(icon, False, False, False)
         box.pack_start(label, True, True, False)
         box.filename = str(path)
@@ -91,6 +93,31 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
             self.headerbar.set_subtitle("No drive mounted")
         else:
             self.headerbar.set_subtitle("Loaded " + os.path.basename(filename))
+
+        for row_wrapper in self.thumbdrive_list:
+            box = row_wrapper.get_child()
+            filename = box.filename
+            icon = None
+            for widget in box:
+                if isinstance(widget, Gtk.Image):
+                    icon = widget
+            if filename == filename:
+                icon.set_from_icon_name('object-select-symbolic', Gtk.IconSize.BUTTON)
+            else:
+                icon.clear()
+
+        for row_wrapper in self.iso_list:
+            box = row_wrapper.get_child()
+            filename = box.filename
+            icon = None
+            for widget in box:
+                if isinstance(widget, Gtk.Image):
+                    icon = widget
+            if filename == filename:
+                icon.set_from_icon_name('object-select-symbolic', Gtk.IconSize.BUTTON)
+            else:
+                icon.clear()
+
 
     @Gtk.Template.Callback()
     def on_image_row_activated(self, listbox, row):
