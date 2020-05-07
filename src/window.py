@@ -60,6 +60,8 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         for iso in datadir.glob('*.iso'):
             self.add_iso(iso)
 
+        self.update_mounted()
+
         self.thumbdrive_list.show_all()
         self.iso_list.show_all()
 
@@ -83,14 +85,14 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         box.filename = str(path)
         self.iso_list.insert(box, -1)
 
-    def update_mounted():
+    def update_mounted(self):
         filename = vdisk.get_mounted()
         if filename is None:
             self.headerbar.set_subtitle("No drive mounted")
         else:
-            self.headerbar.set_subtitle(filename)
+            self.headerbar.set_subtitle("Loaded " + os.path.basename(filename))
 
-    @Gtk.Template.Callback
+    @Gtk.Template.Callback()
     def on_image_row_activated(self, listbox, row):
         box = row.get_child()
         filename = box.filename

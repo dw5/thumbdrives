@@ -53,6 +53,8 @@ disable_existing_gadgets () {
 
 create_gadget () {
 	local backing="$1"
+	local devtype="$2"
+
 	mkdir $GADGET
 	echo "0x1209" > $GADGET/idVendor # Generic
 	echo "0x4202" > $GADGET/idProduct # Random id
@@ -79,6 +81,7 @@ create_gadget () {
 
 	# Link mass storage gadget to backing file
 	echo $backing > $LUN/file
+	echo $devtype > $LUN/cdrom
 
 	# Mass storage hardware name
 	echo "Thumbdrives" > $LUN/inquiry_string
@@ -96,7 +99,7 @@ then
 
 	[ -d $GADGET ] && remove_gadget $GADGET
 	disable_existing_gadgets
-	create_gadget "$BACKING_FILE"
+	create_gadget "$BACKING_FILE" "0"
 fi
 
 if [ "$ACTION" = "mount-iso" ]
@@ -104,7 +107,7 @@ then
 
 	[ -d $GADGET ] && remove_gadget $GADGET
 	disable_existing_gadgets
-	create_gadget "$BACKING_FILE"
+	create_gadget "$BACKING_FILE" "1"
 fi
 
 if [ "$ACTION" = "umount" ]
