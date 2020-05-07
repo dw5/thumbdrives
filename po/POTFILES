@@ -1,0 +1,7 @@
+data/nl.brixit.Thumbdrives.desktop.in
+data/nl.brixit.Thumbdrives.appdata.xml.in
+data/nl.brixit.Thumbdrives.gschema.xml
+src/window.ui
+src/main.py
+src/window.py
+
