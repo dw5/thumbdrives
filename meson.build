@@ -5,6 +5,8 @@ project('thumbdrives',
                    ],
 )
 
+dependency('libhandy-0.0', version: '>=0.0.10')
+
 i18n = import('i18n')
 
 

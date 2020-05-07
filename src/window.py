@@ -26,7 +26,12 @@
 # use or other dealings in this Software without prior written
 # authorization.
 
+import subprocess
+import os
+
 from gi.repository import Gtk
+from xdg import XDG_DATA_HOME
+
 import thumbdrives.vdisk as vdisk
 
 
@@ -37,8 +42,20 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     mount = Gtk.Template.Child()
     unmount = Gtk.Template.Child()
 
+    thumbdrive_list = Gtk.Template.Child()
+    iso_list = Gtk.Template.Child()
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        datadir = XDG_DATA_HOME / "thumbdrives"
+        if not datadir.is_dir():
+            datadir.mkdir()
+
+        for img in datadir.glob('*.img'):
+            self.add_img(img)
+        for iso in datadir.glob('*.iso'):
+            self.add_iso(iso)
 
     def on_mount_clicked(self, widget, args):
         print("MOUNTING")
@@ -47,3 +64,15 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
 
     def on_unmount_clicked(self, widget, args):
         vdisk.unmount()
+
+    def add_img(path):
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        label = Gtk.Label(path.name.replace(".img", ""))
+        box.pack_start(label, True, True, False)
+        self.thumbdrive_list.insert(box)
+
+    def add_iso(path):
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        label = Gtk.Label(path.name.replace(".iso", ""))
+        box.pack_start(label, True, True, False)
+        self.iso_list.insert(box)

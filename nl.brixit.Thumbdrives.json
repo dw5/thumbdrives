@@ -22,6 +22,26 @@
         "*.a"
     ],
     "modules" : [
+    {
+	    "name" : "libhandy",
+	    "buildsystem" : "meson",
+	    "config-opts" : [
+		"-Dprofiling=false",
+		"-Dintrospection=enabled",
+		"-Dgtk_doc=false",
+		"-Dtests=false",
+		"-Dexamples=false",
+		"-Dvapi=false",
+		"-Dglade_catalog=disabled"
+	    ],
+	    "sources" : [
+		{
+		    "type" : "git",
+		    "url" : "https://source.puri.sm/Librem5/libhandy.git",
+		    "branch": "v0.0.11"
+		}
+	    ]
+	},
         {
             "name" : "thumbdrives",
             "builddir" : true,
