@@ -1,31 +1,3 @@
-# window.py
-#
-# Copyright 2020 Martijn Braam
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE X CONSORTIUM BE LIABLE FOR ANY
-# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#
-# Except as contained in this notice, the name(s) of the above copyright
-# holders shall not be used in advertising or otherwise to promote the sale,
-# use or other dealings in this Software without prior written
-# authorization.
-
 import subprocess
 import os
 from pathlib import Path
@@ -45,6 +17,11 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'ThumbdrivesWindow'
 
     headerbar = Gtk.Template.Child()
+    main_stack =Gtk.Template.Child()
+    header_stack =Gtk.Template.Child()
+
+    unmount = Gtk.Template.Child()
+
     thumbdrive_list = Gtk.Template.Child()
     iso_list = Gtk.Template.Child()
 
@@ -55,10 +32,16 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         if not datadir.is_dir():
             datadir.mkdir()
 
+        downloads = Path("~/Downloads").expanduser()
+
         for img in datadir.glob('*.img'):
             self.add_img(img)
         for iso in datadir.glob('*.iso'):
             self.add_iso(iso)
+
+        if downloads.is_dir():
+            for iso in downloads.glob('*.iso'):
+                self.add_iso(iso)
 
         self.update_mounted()
 
@@ -68,6 +51,7 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     def add_img(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         icon = Gtk.Image()
+        icon.set_size_request(16, 16)
         label = Gtk.Label(path.name.replace(".img", ""), xalign=0)
         label.set_margin_top(8)
         label.set_margin_bottom(8)
@@ -79,6 +63,7 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     def add_iso(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         icon = Gtk.Image()
+        icon.set_size_request(16, 16)
         label = Gtk.Label(path.name.replace(".iso", ""), xalign=0)
         label.set_margin_top(8)
         label.set_margin_bottom(8)
@@ -90,30 +75,30 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     def update_mounted(self):
         filename = vdisk.get_mounted()
         if filename is None:
+            self.unmount.set_sensitive(False)
             self.headerbar.set_subtitle("No drive mounted")
         else:
+            self.unmount.set_sensitive(True)
             self.headerbar.set_subtitle("Loaded " + os.path.basename(filename))
 
         for row_wrapper in self.thumbdrive_list:
             box = row_wrapper.get_child()
-            filename = box.filename
             icon = None
             for widget in box:
                 if isinstance(widget, Gtk.Image):
                     icon = widget
-            if filename == filename:
+            if box.filename == filename:
                 icon.set_from_icon_name('object-select-symbolic', Gtk.IconSize.BUTTON)
             else:
                 icon.clear()
 
         for row_wrapper in self.iso_list:
             box = row_wrapper.get_child()
-            filename = box.filename
             icon = None
             for widget in box:
                 if isinstance(widget, Gtk.Image):
                     icon = widget
-            if filename == filename:
+            if box.filename == filename:
                 icon.set_from_icon_name('object-select-symbolic', Gtk.IconSize.BUTTON)
             else:
                 icon.clear()
@@ -130,3 +115,20 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
             vdisk.mount(filename)
 
         self.update_mounted()
+
+    @Gtk.Template.Callback()
+    def on_unmount_clicked(self, button):
+        vdisk.unmount()
+        self.update_mounted()
+
+    @Gtk.Template.Callback()
+    def on_back_clicked(self, button):
+        self.main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_RIGHT)
+        self.main_stack.set_visible_child_name('home')
+        self.header_stack.set_visible_child_name('home')
+
+    @Gtk.Template.Callback()
+    def on_add_thumbdrive_clicked(self, button):
+        self.main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT)
+        self.main_stack.set_visible_child_name('add_thumbdrive')
+        self.header_stack.set_visible_child_name('back')
