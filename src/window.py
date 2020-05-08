@@ -25,6 +25,11 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     thumbdrive_list = Gtk.Template.Child()
     iso_list = Gtk.Template.Child()
 
+    frame_thumbdrive = Gtk.Template.Child()
+    no_thumbdrive = Gtk.Template.Child()
+    frame_iso = Gtk.Template.Child()
+    no_iso = Gtk.Template.Child()
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -47,6 +52,7 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
 
         self.thumbdrive_list.show_all()
         self.iso_list.show_all()
+        self.update_visibility()
 
     def add_img(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -71,6 +77,25 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         box.pack_start(label, True, True, False)
         box.filename = str(path)
         self.iso_list.insert(box, -1)
+
+    def update_visibility(self):
+        has_thumbdrives = len(list(self.thumbdrive_list)) > 0
+        has_iso = len(list(self.iso_list)) > 0
+
+        if has_thumbdrives:
+            self.no_thumbdrive.hide()
+            self.frame_thumbdrive.show()
+        else:
+            self.no_thumbdrive.show()
+            self.frame_thumbdrive.hide()
+
+        if has_iso:
+            self.no_iso.hide()
+            self.frame_iso.show()
+        else:
+            self.no_iso.show()
+            self.frame_iso.hide()
+
 
     def update_mounted(self):
         filename = vdisk.get_mounted()

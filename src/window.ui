@@ -122,7 +122,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFrame">
+                      <object class="GtkFrame" id="frame_thumbdrive">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">12</property>
@@ -154,6 +154,22 @@
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="no_thumbdrive">
+                        <property name="can_focus">False</property>
+                        <property name="margin_bottom">24</property>
+                        <property name="label" translatable="yes">There are no thumbdrive images yet.
+Add a thumbdrive to get started</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -199,11 +215,11 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFrame">
+                      <object class="GtkFrame" id="frame_iso">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">12</property>
@@ -234,7 +250,23 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="no_iso">
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">There are no CD/DVD images yet.
+Use the add button to download one of the templates or download an .iso file into ~/Downloads to get started</property>
+                        <property name="wrap">True</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>

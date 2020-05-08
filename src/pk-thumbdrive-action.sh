@@ -80,8 +80,8 @@ create_gadget () {
 	echo "Thumbdrive" > $LOCALE/configuration
 
 	# Link mass storage gadget to backing file
-	echo $backing > $LUN/file
 	echo $devtype > $LUN/cdrom
+	echo $backing > $LUN/file
 
 	# Mass storage hardware name
 	echo "Thumbdrives" > $LUN/inquiry_string
