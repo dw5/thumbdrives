@@ -68,7 +68,7 @@ create_gadget () {
 
 	# Mass storage function
 	FUNCTION=$GADGET/functions/mass_storage.0
-	LUN=$FUNCTION/lun.1
+	LUN=$FUNCTION/lun.0
 	mkdir $FUNCTION || echo "Could not create $FUNCTION"
 	mkdir $LUN || echo "Could not create $LUN"
 

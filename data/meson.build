@@ -43,3 +43,7 @@ endif
 install_data('nl.brixit.Thumbdrives.policy',
   install_dir: join_paths(get_option('datadir'), 'polkit-1/actions')
 )
+
+install_data('nl.brixit.Thumbdrives.svg',
+  install_dir: join_paths(get_option('datadir'), 'icons/hicolor/scalable/apps')
+)

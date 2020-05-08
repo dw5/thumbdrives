@@ -22,7 +22,7 @@ def get_mounted():
     if raw.strip() == "":
         return None
 
-    with open(gadget+"/functions/mass_storage.0/lun.1/file") as handle:
+    with open(gadget+"/functions/mass_storage.0/lun.0/file") as handle:
         raw = handle.read()
 
     if raw.strip() == "":
