@@ -139,6 +139,8 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         else:
             vdisk.mount(filename)
 
+        listbox.unselect_all()
+
         self.update_mounted()
 
     @Gtk.Template.Callback()
