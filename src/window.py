@@ -177,9 +177,11 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
 
         with open(filename, 'ab') as handle:
             handle.truncate(size * 1024 * 1024)
-        self.add_img(filename)
+
+        self.add_img(Path(filename))
         self.thumbdrive_list.show_all()
         self.update_visibility()
+
         self.main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_RIGHT)
         self.main_stack.set_visible_child_name('home')
         self.header_stack.set_visible_child_name('home')
