@@ -1,54 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="0.0"/>
+  <object class="GtkAdjustment" id="size_adj">
+    <property name="upper">16000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">128</property>
+  </object>
   <template class="ThumbdrivesWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="default_width">600</property>
     <property name="default_height">300</property>
-    <child type="titlebar">
-      <object class="HdyHeaderBar" id="headerbar">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="title">Thumbdrives</property>
-        <property name="subtitle">No drive mounted</property>
-        <child>
-          <object class="GtkStack" id="header_stack">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkButton" id="unmount">
-                <property name="label" translatable="yes">Eject</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="on_unmount_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="name">home</property>
-                <property name="title" translatable="yes">page0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="back_button">
-                <property name="label">gtk-go-back</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_back_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="name">back</property>
-                <property name="title" translatable="yes">page1</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
     <child>
       <object class="GtkStack" id="main_stack">
         <property name="visible">True</property>
@@ -349,6 +312,7 @@ Use the add button to download one of the templates or download an .iso file int
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="input_purpose">digits</property>
+                            <property name="adjustment">size_adj</property>
                             <property name="numeric">True</property>
                           </object>
                           <packing>
@@ -374,21 +338,22 @@ Use the add button to download one of the templates or download an .iso file int
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <child>
-                              <placeholder/>
-                            </child>
                             <child type="center">
                               <object class="GtkButton" id="create">
                                 <property name="label" translatable="yes">Create</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <signal name="clicked" handler="on_create_clicked" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
@@ -423,6 +388,48 @@ Use the add button to download one of the templates or download an .iso file int
             <property name="title" translatable="yes">page1</property>
             <property name="position">1</property>
           </packing>
+        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="HdyHeaderBar" id="headerbar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title">Thumbdrives</property>
+        <property name="subtitle">No drive mounted</property>
+        <child>
+          <object class="GtkStack" id="header_stack">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkButton" id="unmount">
+                <property name="label" translatable="yes">Eject</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_unmount_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="name">home</property>
+                <property name="title" translatable="yes">page0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="back_button">
+                <property name="label">gtk-go-back</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_back_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="name">back</property>
+                <property name="title" translatable="yes">page1</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
         </child>
       </object>
     </child>

@@ -30,6 +30,10 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
     frame_iso = Gtk.Template.Child()
     no_iso = Gtk.Template.Child()
 
+    image_name = Gtk.Template.Child()
+    image_size = Gtk.Template.Child()
+    size_adj = Gtk.Template.Child()
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -47,12 +51,16 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         if downloads.is_dir():
             for iso in downloads.glob('*.iso'):
                 self.add_iso(iso)
+            for img in downloads.glob('*.img'):
+                self.add_img(img)
 
         self.update_mounted()
 
         self.thumbdrive_list.show_all()
         self.iso_list.show_all()
         self.update_visibility()
+
+        self.datadir = datadir
 
     def add_img(self, path):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -159,3 +167,19 @@ class ThumbdrivesWindow(Gtk.ApplicationWindow):
         self.main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT)
         self.main_stack.set_visible_child_name('add_thumbdrive')
         self.header_stack.set_visible_child_name('back')
+
+    @Gtk.Template.Callback()
+    def on_create_clicked(self, button):
+        name = self.image_name.get_text()
+        size = self.size_adj.get_value()
+
+        filename = os.path.join(self.datadir, name + ".img")
+
+        with open(filename, 'ab') as handle:
+            handle.truncate(size * 1024 * 1024)
+        self.add_img(filename)
+        self.thumbdrive_list.show_all()
+        self.update_visibility()
+        self.main_stack.set_transition_type(Gtk.StackTransitionType.SLIDE_RIGHT)
+        self.main_stack.set_visible_child_name('home')
+        self.header_stack.set_visible_child_name('home')
